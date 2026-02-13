@@ -258,12 +258,19 @@
     const w = window.innerWidth;
     const h = window.innerHeight;
     
-    if (w / h > ratio) {
-      canvas.style.height = h + 'px';
-      canvas.style.width = (h * ratio) + 'px';
-    } else {
+    // On mobile, make it fullscreen
+    if (w < 768) {
       canvas.style.width = w + 'px';
-      canvas.style.height = (w / ratio) + 'px';
+      canvas.style.height = h + 'px';
+    } else {
+      // Desktop: maintain aspect ratio
+      if (w / h > ratio) {
+        canvas.style.height = h + 'px';
+        canvas.style.width = (h * ratio) + 'px';
+      } else {
+        canvas.style.width = w + 'px';
+        canvas.style.height = (w / ratio) + 'px';
+      }
     }
   }
   resizeCanvas();
@@ -550,8 +557,8 @@
 
   const player = {
     x: W * 0.5, y: H * 0.82,
-    r: 18,
-    speed: 360,
+    r: 28,
+    speed: 500,
     hp: 6,
     invUntil: 0,
 
@@ -806,61 +813,61 @@
     const type = currentLevelConfig.enemyType;
     
     if (type === "small") {
-      const r = rand(16, 22);
+      const r = rand(24, 32);
       const hp = 2;
       const speed = rand(90, 150);
       enemies.push({ type: "small", x, y, r, hp, maxHp: hp, speed, vx: rand(-30, 30), shootTimer: 0 });
     }
     else if (type === "shielded") {
-      const r = rand(18, 24);
+      const r = rand(26, 34);
       const hp = 4;
       const speed = rand(80, 130);
       enemies.push({ type: "shielded", x, y, r, hp, maxHp: hp, speed, vx: rand(-25, 25), shootTimer: 0, shielded: true });
     }
     else if (type === "fast") {
-      const r = rand(14, 18);
+      const r = rand(20, 28);
       const hp = 2;
       const speed = rand(180, 260);
       enemies.push({ type: "fast", x, y, r, hp, maxHp: hp, speed, vx: rand(-60, 60), shootTimer: 0 });
     }
     else if (type === "shooter") {
-      const r = rand(16, 22);
+      const r = rand(24, 32);
       const hp = 3;
       const speed = rand(70, 110);
       enemies.push({ type: "shooter", x, y, r, hp, maxHp: hp, speed, vx: rand(-20, 20), shootTimer: 2.5 });
     }
     else if (type === "meteor") {
-      const r = rand(20, 28);
+      const r = rand(28, 38);
       const hp = 3;
       const speed = rand(200, 300);
       enemies.push({ type: "meteor", x, y, r, hp, maxHp: hp, speed, vx: 0, shootTimer: 0, trail: [] });
     }
     else if (type === "teleport") {
-      const r = rand(16, 22);
+      const r = rand(24, 32);
       const hp = 3;
       const speed = rand(80, 120);
       enemies.push({ type: "teleport", x, y, r, hp, maxHp: hp, speed, vx: rand(-30, 30), shootTimer: 0, teleportTimer: rand(2, 4) });
     }
     else if (type === "split") {
-      const r = rand(18, 24);
+      const r = rand(26, 34);
       const hp = 3;
       const speed = rand(90, 140);
       enemies.push({ type: "split", x, y, r, hp, maxHp: hp, speed, vx: rand(-30, 30), shootTimer: 0, canSplit: true });
     }
     else if (type === "kamikaze") {
-      const r = rand(16, 20);
+      const r = rand(24, 30);
       const hp = 2;
       const speed = rand(150, 220);
       enemies.push({ type: "kamikaze", x, y, r, hp, maxHp: hp, speed, vx: 0, shootTimer: 0 });
     }
     else if (type === "invincible") {
-      const r = rand(18, 24);
+      const r = rand(26, 34);
       const hp = 3;
       const speed = rand(90, 130);
       enemies.push({ type: "invincible", x, y, r, hp, maxHp: hp, speed, vx: rand(-30, 30), shootTimer: 0, invTimer: 0, invPhase: false });
     }
     else if (type === "tank") {
-      const r = rand(26, 34);
+      const r = rand(38, 48);
       const hp = 8;
       const speed = rand(50, 80);
       enemies.push({ type: "tank", x, y, r, hp, maxHp: hp, speed, vx: rand(-15, 15), shootTimer: 0 });
@@ -872,7 +879,7 @@
       const cy = 100;
       const sx = cx + Math.cos(angle) * dist;
       const sy = cy + Math.sin(angle) * dist;
-      const r = rand(16, 22);
+      const r = rand(24, 32);
       const hp = 2;
       const speed = rand(90, 140);
       enemies.push({ type: "spiral", x: sx, y: sy, r, hp, maxHp: hp, speed, vx: rand(-30, 30), shootTimer: 0 });
@@ -887,7 +894,7 @@
       return;
     }
     else if (type === "valentine") {
-      const r = rand(16, 22);
+      const r = rand(24, 32);
       const hp = 3;
       const speed = rand(100, 150);
       enemies.push({ type: "valentine", x, y, r, hp, maxHp: hp, speed, vx: rand(-40, 40), shootTimer: 0 });
@@ -930,7 +937,7 @@
 
     boss = {
       x: W * 0.5, y: 110,
-      r: 60,
+      r: 85,
       hp,
       maxHp: hp,
       phase: 1,
@@ -1062,7 +1069,7 @@
       const dy = touchInput.targetY - player.y;
       const dist = Math.hypot(dx, dy);
       
-      if (dist > 5) {
+      if (dist > 20) {
         ax = dx / dist;
         ay = dy / dist;
       } else {
@@ -1282,7 +1289,7 @@
               type: "miniboss",
               x: W * (0.3 + k * 0.4),
               y: 120,
-              r: 45,
+              r: 65,
               hp: boss.hp * 0.5,
               maxHp: boss.maxHp * 0.5,
               speed: 0,
@@ -1497,7 +1504,7 @@
       
       if (usePlayerImg) {
         // Draw player image as circle (clip to circle)
-        const radius = 25;
+        const radius = 35;
         ctx.beginPath();
         ctx.arc(0, 0, radius, 0, Math.PI * 2);
         ctx.closePath();
@@ -1506,14 +1513,14 @@
       } else {
         // Fallback: car body
         ctx.fillStyle = "#9aa0aa";
-        roundRect(-22, -14, 44, 28, 10, true);
+        roundRect(-34, -22, 68, 44, 10, true);
         // windshield
         ctx.fillStyle = "rgba(20,20,30,.55)";
-        roundRect(-12, -10, 24, 14, 8, true);
+        roundRect(-18, -16, 36, 22, 8, true);
         // lights
         ctx.fillStyle = "rgba(255,100,130,.9)";
-        ctx.fillRect(-18, -15, 6, 4);
-        ctx.fillRect(12, -15, 6, 4);
+        ctx.fillRect(-28, -23, 9, 6);
+        ctx.fillRect(18, -23, 9, 6);
       }
       
       ctx.restore();
